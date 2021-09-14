@@ -18,19 +18,19 @@ class Node:
         other.depth = self.depth + 1
 
         
-    def to_abstract_syntax_tree(self):
+    def to_ast(self):
         """Return an array representing the Node and its children."""
         ast = [self.label]
         for c in self.children:
             if c.children == []:
                 ast.append(c.label)
             else:
-                ast.append(c.to_abstract_syntax_tree)
+                ast.append(c.to_ast())
         return ast
         
 
     def __str__(self):
-        return str(self.to_abstract_syntax_tree())
+        return str(self.to_ast())
 
 
 def custom_slice(program):
@@ -50,7 +50,12 @@ def custom_slice(program):
             elif program[current_index] == "(":
                 num_open_parens += 1
             current_index += 1
-        return subprogram, program[current_index:]
+
+        new_program = program[current_index:]
+        if new_program != "":
+            # Remove the space that would be at the start of the rest of the program
+            new_program = new_program[1:]
+        return subprogram, new_program
     else:
         custom_split = program.split(" ", 1)
         try:
@@ -95,7 +100,7 @@ def program_to_node(program):
     
 def main():
     test_tree = program_to_node("(first (list 1 (+ 2 3) 9))")
-    print(test_tree)
+    print(test_tree.to_ast())
 
 if __name__ == "__main__":
     main()

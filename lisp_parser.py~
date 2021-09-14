@@ -1,0 +1,17 @@
+# lisp_parser.py
+# Jack Scacco
+# 9/14/21
+
+class Node:
+    def __init__(self, value, label):
+        self.children = []
+        self.value = None
+        self.label = ""
+
+    def 
+    
+def main():
+    print("Hello world")
+
+if __name__ == "__main__":
+    main()

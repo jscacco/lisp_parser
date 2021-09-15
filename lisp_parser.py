@@ -6,18 +6,14 @@ class Node:
     def __init__(self, label):
         self.children = []
         self.label = label
-        self.depth = 0
         
         # value is unused for now, but will be once we start evaluating programs
         self.value = None
 
-        
     def add_child(self, other):
         """Given another Node, add it to this Node's children."""
         self.children.append(other)
-        other.depth = self.depth + 1
 
-        
     def to_ast(self):
         """Return an array representing the Node and its children."""
         ast = [self.label]
@@ -28,7 +24,6 @@ class Node:
                 ast.append(c.to_ast())
         return ast
         
-
     def __str__(self):
         return str(self.to_ast())
 
@@ -43,9 +38,12 @@ def custom_slice(program):
     
     # If we have a sub-program, we want to slice until we have closed all parens
     if program[0] == "(":
+
         current_index = 1
         num_open_parens = 1
         subprogram = "("
+
+        # loop through until we find the parens' matches
         while num_open_parens > 0:
             subprogram += program[current_index]
             if program[current_index] == ")":
@@ -56,14 +54,19 @@ def custom_slice(program):
 
         # we got our slice, so keep track of what the new_program is
         new_program = program[current_index:]
+        
         if new_program != "":
             # Remove the space that would be at the start of the rest of the program
             new_program = new_program[1:]
+            
         return subprogram, new_program
 
     # This isn't a subprogram, so we want to get all the info up until the first space
     else:
+
         custom_split = program.split(" ", 1)
+
+        # This basically checks if we are at the end of the program)
         try:
             return custom_split[0], custom_split[1]
         except IndexError:
